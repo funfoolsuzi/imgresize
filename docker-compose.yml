@@ -16,6 +16,10 @@ services:
       - imaginary
     networks:
       - img_net
+    volumes:
+      - ./originals:/originals
+      - ./resized:/resized
+      - ./log:/log
 
 networks:
   img_net:

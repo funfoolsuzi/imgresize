@@ -13,8 +13,6 @@ WORKDIR /
 
 COPY --from=builder /src/app .
 
-COPY --from=builder /src/originals ./originals
-
 EXPOSE 8080
 
 ENTRYPOINT ["/app"]

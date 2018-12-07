@@ -8,3 +8,10 @@ func (c *Container) handleIndex() http.HandlerFunc {
 		w.Write([]byte("Welcome to imgResize"))
 	})
 }
+
+func (c *Container) handleResize() http.HandlerFunc {
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	})
+}
