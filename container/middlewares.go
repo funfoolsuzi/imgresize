@@ -40,7 +40,7 @@ func (c *Container) middlewareResizedValidation(next http.Handler) http.Handler 
 
 		p := r.URL.Path
 		p = p[8:] // remove "/resized" in the path
-		re := regexp.MustCompile(`(?P<name>[\w\\]+)_h(?P<height>\d+)_w(?P<weight>\d+).(?P<suffix>\w+)`)
+		re := regexp.MustCompile(`(?P<name>[\w/]+)_h(?P<height>\d+)_w(?P<width>\d+)\.(?P<suffix>\w+)`)
 
 		if !re.MatchString(p) {
 			w.WriteHeader(http.StatusBadRequest)
@@ -60,6 +60,7 @@ func (c *Container) middlewareResizedValidation(next http.Handler) http.Handler 
 			return
 		}
 
+		log.Printf("%s original: %s, height: %s, width: %s", reqID, fp, height, width)
 		ctx = context.WithValue(ctx, contextKeyOriginal, fp)
 		ctx = context.WithValue(ctx, contextKeyHeight, height)
 		ctx = context.WithValue(ctx, contextKeyWidth, width)
