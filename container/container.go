@@ -10,14 +10,17 @@ import (
 
 // Container is the IoC container for the server
 type Container struct {
-	router *mux.Router
-	repo   repo.ImageRepo
+	router        *mux.Router
+	originalsRepo repo.ImageRepo
+	resizedRepo   repo.ImageRepo
 }
 
 // NewContainer creates an initialized instance of Container
 func NewContainer() *Container {
 	c := &Container{
-		router: mux.NewRouter(),
+		router:        mux.NewRouter(),
+		originalsRepo: repo.NewImageRepository("originals"),
+		resizedRepo:   repo.NewImageRepository("resized"),
 	}
 
 	return c
