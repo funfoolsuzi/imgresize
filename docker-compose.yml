@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  imaginary:
+    image: h2non/imaginary
+    ports:
+      - "8081:9000"
+    networks:
+      - img_net
+  
+  imgresize:
+    image: imgresize
+    ports:
+      - "8080:8080"
+    depends_on:
+      - imaginary
+    networks:
+      - img_net
+
+networks:
+  img_net:
+    driver: bridge
