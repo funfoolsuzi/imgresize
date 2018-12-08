@@ -88,7 +88,7 @@ func (c *Container) handleResize() http.HandlerFunc {
 			return
 		}
 
-		re := regexp.MustCompile(`(?P<name>[\w/]+)\.(?P<suffix>\w+)`)
+		re := regexp.MustCompile(`(?P<name>.+)\.(?P<suffix>[^\.]+)$`)
 		newName := re.ReplaceAllString(getOriginalPath(ctx), fmt.Sprintf("${name}_h%s_w%s.${suffix}", getHeight(ctx), getWidth(ctx)))
 		err = c.resizedRepo.Create(resizedBytes, newName)
 		if err != nil {
