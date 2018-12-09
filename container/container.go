@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/funfoolsuzi/imgresize/imaginaryclient"
 	"github.com/funfoolsuzi/imgresize/repo"
 	"github.com/gorilla/mux"
 )
@@ -13,6 +14,7 @@ type Container struct {
 	router        *mux.Router
 	originalsRepo repo.ImageRepo
 	resizedRepo   repo.ImageRepo
+	imageResizer  imaginaryclient.Resizer
 }
 
 // NewContainer creates an initialized instance of Container
@@ -21,6 +23,7 @@ func NewContainer() *Container {
 		router:        mux.NewRouter(),
 		originalsRepo: repo.NewImageRepository("originals"),
 		resizedRepo:   repo.NewImageRepository("resized"),
+		imageResizer:  imaginaryclient.NewImaginaryClient("http://imaginary:9000"),
 	}
 
 	return c

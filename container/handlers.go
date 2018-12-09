@@ -1,9 +1,7 @@
 package container
 
 import (
-	"bytes"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"regexp"
@@ -58,33 +56,11 @@ func (c *Container) handleResize() http.HandlerFunc {
 			return
 		}
 
-		url := fmt.Sprintf("http://imaginary:9000/resize?width=%s&height=%s", getWidth(ctx), getHeight(ctx))
-		reqResize, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(originalImage))
-		reqResize.Header.Set("Content-Type", "image/*")
+		resizedBytes, err := c.imageResizer.Resize(originalImage, getWidth(ctx), getHeight(ctx))
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Error resizng image"))
-			log.Printf("%s failed to create request to imaginary. %v", reqID, err)
-			return
-		}
-
-		log.Printf("%s sending http resize request to %s", reqID, url)
-
-		resResize, err := http.DefaultClient.Do(reqResize)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Error resizng image"))
-			log.Printf("%s failed http request to imaginary. %v", reqID, err)
-			return
-		}
-		defer resResize.Body.Close()
-		log.Printf("%s http resp from imaginary %d Content-Length:%s", reqID, resResize.StatusCode, resResize.Header.Get("Content-Length"))
-
-		resizedBytes, err := ioutil.ReadAll(resResize.Body)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Error resizng image"))
-			log.Printf("%s failed to read from imaginary response body. %v", reqID, err)
+			log.Printf("%s failed to resize image. %v", reqID, err)
 			return
 		}
 
