@@ -27,6 +27,8 @@ Once the docker-compose is up, try a few url in your browser:
 "http://127.0.0.1:8080/originals/gophers/fancygopher.jpg"
 "http://127.0.0.1:8080/resized/gophers/fancygopher_h100_w100.jpg"
 
+
+
 ### Description
 
 This app relies on another go repo: [github.com/h2non/imaginary](https://github.com/h2non/imaginary)
@@ -37,3 +39,15 @@ If a resized image doesn't exist at first, the main service will contact an inst
 
 log for the main service is persisted at `./log/app.log`. Once you run the service, you can get most updated log entries withouth `docker exec -it container_name /bin/sh`.
 
+The service is built with Dependency Injection/IoC(Inversion of Control) pattern. This will let components being able to be mocked, thus forming better testibility. I have introduced this pattern to my current job. Everything is organized within IoC Container.
+
+
+
+### Developer Notes
+
+1. Whenever interfaces are updated, remember to call `make mockgen` to update the mock files. This requires your OS with mockgen installed(`go install github.com/golang/mock/mockgen`).
+
+
+### TODO
+1. add config file to the service.
+2. More unit tests.
